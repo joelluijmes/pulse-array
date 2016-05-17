@@ -1,0 +1,26 @@
+{
+  "name": "pulse-array",
+  "homepage": "https://github.com/joelluijmes/pulse-array",
+  "authors": [
+    "Joël Luijmes <joelluijmes@gmail.com>"
+  ],
+  "description": "Backend for 0xFC Pulses",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5",
+    "fastclick": ">=0.6.11",
+    "foundation": "zurb/bower-foundation",
+    "foundation-sites": "~6.2.0",
+    "jquery": "^2.2.3",
+    "motion-ui": "~1.2.2"
+  }
+}
