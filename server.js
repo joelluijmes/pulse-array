@@ -4,7 +4,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     api = require('./routes/api'),
     http = require('http'),
-    path = require('path');
+    path = require('path'),
+    fs = require('fs');
 
 var app = module.exports = express();
 
@@ -20,23 +21,10 @@ app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', api);
-app.use('*', function(req, res) {
-    res.status(404);
-
-    // respond with html page
-    if (req.accepts('html')) {
-        res.render('404.html', { url: req.url });
-        return;
-    }
-
-    // respond with json
-    if (req.accepts('json')) {
-        res.send({ error: 'Not found' });
-        return;
-    }
-
-    // default to plain-text. send()
-    res.type('txt').send('Not found');
+app.get('*', function(req, res) {
+    fs.readFile(__dirname + '/public/index.html', 'utf8', function(err, content) {
+        res.send(content);
+    });
 });
 
 

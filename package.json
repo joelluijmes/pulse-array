@@ -10,6 +10,7 @@
     "error-handler": "^1.0.0",
     "errorhandler": "^1.4.3",
     "express": "^4.13.4",
+    "fs": "0.0.2",
     "http": "^0.0.0",
     "logger": "^0.0.1",
     "method-override": "^2.3.5",

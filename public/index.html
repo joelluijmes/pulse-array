@@ -7,24 +7,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentallela Alela! | </title>
+    <title>Pulse-Array</title>
 
-    <!-- Bootstrap -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="bower_components/iCheck/skins/flat/green.css" rel="stylesheet">
-    <!-- bootstrap-progressbar -->
-    <link href="bower_components/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- jVectorMap -->
-    <link href="css/maps/jquery-jvectormap-2.0.3.css" rel="stylesheet"/>
-
-    <!-- Custom Theme Style -->
     <link href="css/custom.css" rel="stylesheet">
+
+    <base href="/">
 </head>
 
-<body class="nav-md">
+<body class="nav-md pace-done">
+
+<div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+    <div class="pace-progress-inner"></div>
+</div>
+
+<div class="pace-activity"></div></div>
+
 <div class="container body">
     <div class="main_container">
         <div class="col-md-3 left_col">
@@ -54,11 +53,11 @@
                     <div class="menu_section">
                         <h3>General</h3>
                         <ul class="nav side-menu">
-                            <li><a href="#/home"><i class="fa fa-home"></i> Home</a></li>
-                            <li><a href="#/realtime><i class="fa fa-bar-chart-o"></i> Realtime</a></li>
-                            <li><a href="#/history><i class="fa fa-book"></i> History</a></li>
-                            <li><a href="#/backup><i class="fa fa-cloud-download"></i> Backup</a></li>
-                            <li><a href="#/settings><i class="fa fa-gear"></i> Settings</a></li>
+                            <li><a href="/home"><i class="fa fa-home"></i> Home</a></li>
+                            <li><a href="/realtime"><i class="fa fa-bar-chart-o"></i> Realtime</a></li>
+                            <li><a href="/history"><i class="fa fa-book"></i> History</a></li>
+                            <li><a href="/backup"><i class="fa fa-cloud-download"></i> Backup</a></li>
+                            <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                         </ul>
                     </div>
                 </div>
@@ -68,7 +67,6 @@
 
         <!-- top navigation -->
         <div class="top_nav">
-
             <div class="nav_menu">
                 <nav class="" role="navigation">
                     <div class="nav toggle">
@@ -81,7 +79,7 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main" style="min-height: 1055px;">
+        <div class="right_col" role="main">
             <div ng-view></div>
 
             <br>
@@ -105,9 +103,10 @@
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/PACE/pace.min.js"></script>
 
-<script src="home/home.js"></script>
-<script src="app.js"></script>
+<script src="js/app.js"></script>
+<script src="js/site.js"></script>
 
 </body>
 </html>
