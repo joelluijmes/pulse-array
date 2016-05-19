@@ -13,6 +13,7 @@
     "http": "^0.0.0",
     "logger": "^0.0.1",
     "method-override": "^2.3.5",
+    "mongoose": "^4.4.17",
     "morgan": "^1.7.0",
     "path": "^0.12.7"
   },
