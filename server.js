@@ -3,12 +3,13 @@ var express = require('express'),
     mongoose = require('mongoose'),
     methodOverride = require('method-override'),
     api = require('./routes/api'),
-    http = require('http'),
     path = require('path'),
-    fs = require('fs'),
-    io = require('socket.io')(http);
+    fs = require('fs');
 
 var app = module.exports = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname + '/public'));
@@ -47,15 +48,12 @@ app.use(function (err, req, res, next) {
     });
 });
 
+mongoose.connect('mongodb://localhost/pulse-array');
 
 io.on('connection', function(socket) {
     console.log('haaai');
 });
 
-
-mongoose.connect('mongodb://localhost/pulse-array');
-
-var server = http.createServer(app);
 server.listen(app.get('port'), function() {
     console.log('Express server on port ' + app.get('port'));
 });
