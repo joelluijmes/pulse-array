@@ -3,7 +3,6 @@ angular.module('myApp', ['ngRoute'])
         $locationProvider.html5Mode(true);
 
         $routeProvider
-            .when('/', {templateUrl: '../partials/home.html'})
             .when('/home', {templateUrl: '../partials/home.html'})
             .when('/realtime', {templateUrl: '../partials/realtime.html'})
             .when('/history', {templateUrl: '../partials/history.html'})
