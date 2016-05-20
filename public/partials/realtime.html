@@ -21,7 +21,41 @@
 <script src="../js/jquery.flot.axislabels.js"></script>
 
 <script>
-    var socket = io();
+    var data = [];
+    var len = 100;
+
+    var options = {
+        series: {
+            curvedLines: {
+                apply: true,
+                active: true,
+                monotonicFit: true
+            }
+        },
+        xaxis: {
+            mode: 'time',
+            timeformat: '%S',
+            axisLabel: 'Time',
+        },
+        yaxis: {
+            axisLabel: 'BPM',
+            min: 40,
+            max: 80
+        },
+        colors: ["#26B99A"],
+        grid: {
+            borderWidth: {
+                top: 0,
+                right: 0,
+                bottom: 1,
+                left: 1
+            },
+            borderColor: {
+                bottom: "#7F8790",
+                left: "#7F8790"
+            }
+        }
+    };
 
     function translateToFlot(item) {
         var time = new Date(item.date).getTime();
@@ -29,57 +63,53 @@
         return [[ time, bpm ]];
     }
 
+    function randomPush() {
+        data.shift();
+
+        while (data.length < len) {
+            var y = Math.random() * 10 + 50;
+            var x = new Date(Date.now()).getTime();
+            data.push([x, y]);
+        }
+    }
+
+    function update() {
+        randomPush();
+
+        $.plot($("#realtime-graph"), [{
+            label: "Heartbeat",
+            data: data,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            }, //#96CA59 rgba(150, 202, 89, 0.42)
+            points: {
+                fillColor: "#fff"
+            }
+        }], options);
+        setTimeout(update, 50);
+    }
+
     $(document).ready(function() {
 
-        $.get('/api/user/find?id=1', function(res) {
-            if (res.status !== 'success') {
-                console.log(res.error);
-                return;
-            }
+//        $.get('/api/user/find?id=1', function(res) {
+//            if (res.status !== 'success') {
+//                console.log(res.error);
+//                return;
+//            }
+//
+//            data = $.map(res.data.bpms, translateToFlot);
+//            var plot = $.plot($("#realtime-graph"), [{
+//                label: "Heartbeat",
+//                data: data,
+//                lines: {
+//                    fillColor: "rgba(150, 202, 89, 0.12)"
+//                }, //#96CA59 rgba(150, 202, 89, 0.42)
+//                points: {
+//                    fillColor: "#fff"
+//                }
+//            }], options);
+//        });
 
-            var data = $.map(res.data.bpms, translateToFlot);
-
-            //flot options
-            var options = {
-                series: {
-                    curvedLines: {
-                        apply: true,
-                        active: true,
-                        monotonicFit: true
-                    }
-                },
-                xaxis: {
-                    mode: 'time',
-                    timeformat: '%S',
-                    axisLabel: 'Time'
-                },
-                yaxis: {
-                    axisLabel: 'BPM'
-                },
-                colors: ["#26B99A"],
-                grid: {
-                    borderWidth: {
-                        top: 0,
-                        right: 0,
-                        bottom: 1,
-                        left: 1
-                    },
-                    borderColor: {
-                        bottom: "#7F8790",
-                        left: "#7F8790"
-                    }
-                }
-            };
-            var plot = $.plot($("#realtime-graph"), [{
-                label: "Heartbeat",
-                data: data,
-                lines: {
-                    fillColor: "rgba(150, 202, 89, 0.12)"
-                }, //#96CA59 rgba(150, 202, 89, 0.42)
-                points: {
-                    fillColor: "#fff"
-                }
-            }], options);
-        });
+        update();
     });
 </script>
