@@ -40,7 +40,7 @@ router.post('/api/bpm/update', function(req, res) {
     var interval = req.body.interval;
     var timestamp = req.body.timestamp;
     var bpmdata = req.body.dat;
-
+    
     if (!id || !date || !bpm) {
         res.json({status: 'error', message: 'Invalid data'});
         return;

@@ -5,7 +5,8 @@ var express = require('express'),
     api = require('./routes/api'),
     http = require('http'),
     path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    io = require('socket.io')(http);
 
 var app = module.exports = express();
 
@@ -45,6 +46,12 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
+
+io.on('connection', function(socket) {
+    console.log('haaai');
+});
+
 
 mongoose.connect('mongodb://localhost/pulse-array');
 
