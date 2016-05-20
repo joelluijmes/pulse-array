@@ -37,9 +37,10 @@ router.post('/api/user/register', function(req, res) {
 
 router.post('/api/bpm/update', function(req, res) {
     var id = req.body.id;
-    var date = req.body.date;
-    var bpm = req.body.bpm;
-    
+    var interval = req.body.interval;
+    var timestamp = req.body.timestamp;
+    var bpmdata = req.body.dat;
+
     if (!id || !date || !bpm) {
         res.json({status: 'error', message: 'Invalid data'});
         return;
@@ -55,11 +56,16 @@ router.post('/api/bpm/update', function(req, res) {
             return;
         }
 
-        var data = new Bpm({
-            date: date,
-            bpm: bpm
-        });
-        user.bpms.push(data);
+        var frames = Object.keys(req.body.data).length;
+        for(var i = 0; i < frames; i++)
+        {
+            timestamp += interval;
+            var data = new Bpm({
+                date: timestamp * 1000,                                 // convert to milliseconds
+                bpm: bpmdata[i]
+            });
+            user.bpms.push(data);
+        }
 
         user.save(function(err) {
             if (err) {
