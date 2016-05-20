@@ -4,7 +4,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     api = require('./routes/api'),
     path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    realtime = require('realtime');
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
@@ -50,9 +51,7 @@ app.use(function (err, req, res, next) {
 
 mongoose.connect('mongodb://localhost/pulse-array');
 
-io.on('connection', function(socket) {
-    console.log('haaai');
-});
+io.on('connection', server.onConnection);
 
 server.listen(app.get('port'), function() {
     console.log('Express server on port ' + app.get('port'));

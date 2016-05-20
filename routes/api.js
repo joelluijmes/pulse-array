@@ -1,4 +1,5 @@
 var express = require('express');
+var realtime = require('realtime');
 var Bpm = require('../models/bpm');
 var User = require('../models/user');
 
@@ -68,7 +69,9 @@ router.post('/api/bpm/update', function (req, res) {
                 date: timestamp * 1000,                                 // convert to milliseconds
                 bpm: bpms[i]
             });
+
             user.bpms.push(data);
+            realtime.broadcast({date: data.date, bpm: data.bpm});
         }
 
         user.save(function (err) {
