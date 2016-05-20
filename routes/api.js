@@ -57,8 +57,7 @@ router.post('/api/bpm/update', function(req, res) {
 
         var data = new Bpm({
             date: date,
-            bpm: bpm,
-            userId: id
+            bpm: bpm
         });
         user.bpms.push(data);
 
