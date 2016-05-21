@@ -4,7 +4,7 @@ var User = require('../models/user');
 
 var router = express.Router();
 
-router.post('/api/user/register', function(req, res) {
+router.post('/api/user/register', function (req, res) {
     var username = req.body.username;
     var id = req.body.id;
 
@@ -13,7 +13,7 @@ router.post('/api/user/register', function(req, res) {
         return;
     }
 
-    User.findOne({username: username}, function(err, existingUser) {
+    User.findOne({username: username}, function (err, existingUser) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
@@ -22,9 +22,9 @@ router.post('/api/user/register', function(req, res) {
             res.json({status: 'error', message: 'User already registered with this username'});
             return;
         }
-        
+
         var user = new User({username: username, deviceId: id});
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
                 res.json({status: 'error', message: err});
                 return;
@@ -35,18 +35,24 @@ router.post('/api/user/register', function(req, res) {
     })
 })
 
-router.post('/api/bpm/update', function(req, res) {
+router.post('/api/bpm/update', function (req, res) {
     var id = req.body.id;
     var interval = req.body.interval;
     var timestamp = req.body.timestamp;
-    var bpmdata = req.body.dat;
-    
-    if (!id || !date || !bpm) {
+    var bpms = req.body.bpms;
+
+    if (!id || !interval || !timestamp || !bpms) {
         res.json({status: 'error', message: 'Invalid data'});
         return;
     }
 
-    User.findOne({deviceId: id}, function(err, user) {
+    bpms = JSON.parse(bpms);
+    if (bpms.length < 1) {
+        res.json({status: 'error', message: 'Should post at least one bpm'});
+        return;
+    }
+
+    User.findOne({deviceId: id}, function (err, user) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
@@ -56,18 +62,16 @@ router.post('/api/bpm/update', function(req, res) {
             return;
         }
 
-        var frames = Object.keys(req.body.data).length;
-        for(var i = 0; i < frames; i++)
-        {
+        for (var i = 0; i < bpms.length; i++) {
             timestamp += interval;
             var data = new Bpm({
                 date: timestamp * 1000,                                 // convert to milliseconds
-                bpm: bpmdata[i]
+                bpm: bpms[i]
             });
             user.bpms.push(data);
         }
 
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
                 res.json({status: 'error', message: err});
                 return;
@@ -78,7 +82,7 @@ router.post('/api/bpm/update', function(req, res) {
     });
 });
 
-router.get('/api/user/find', function(req, res) {
+router.get('/api/user/find', function (req, res) {
     var id = req.query.id;
 
     if (!id) {
@@ -86,7 +90,7 @@ router.get('/api/user/find', function(req, res) {
         return;
     }
 
-    User.findOne({deviceId: id}, function(err, user) {
+    User.findOne({deviceId: id}, function (err, user) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
@@ -96,19 +100,19 @@ router.get('/api/user/find', function(req, res) {
     });
 });
 
-router.get('/api/user/list/', function(req, res) {
-    User.find({}, 'username deviceId', function(err, users) {
-       if (err) {
-           res.json({status: 'error', message: err});
-           return;
-       }
+router.get('/api/user/list/', function (req, res) {
+    User.find({}, 'username deviceId', function (err, users) {
+        if (err) {
+            res.json({status: 'error', message: err});
+            return;
+        }
 
         res.json({status: 'success', data: users});
     });
 })
 
 
-router.get('/api/*', function(req, res) {
+router.get('/api/*', function (req, res) {
     res.json({status: 'error', message: 'Nothing here yet'});
 });
 
