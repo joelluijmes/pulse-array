@@ -38,8 +38,8 @@ router.post('/api/user/register', function (req, res) {
 
 router.post('/api/bpm/update', function (req, res) {
     var id = req.body.id;
-    var interval = req.body.interval;
-    var timestamp = req.body.timestamp;
+    var interval = parseInt(req.body.interval);
+    var timestamp = parseInt(req.body.timestamp);
     var bpms = req.body.bpms;
 
     if (!id || !interval || !timestamp || !bpms) {
@@ -93,7 +93,7 @@ router.get('/api/user/find', function (req, res) {
         return;
     }
 
-    User.findOne({deviceId: id}, function (err, user) {
+    User.findOne({deviceId: id}, {bpms: { $slice: -10}}, function (err, user) {
         if (err) {
             res.json({status: 'error', message: err});
             return;

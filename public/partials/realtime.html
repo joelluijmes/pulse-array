@@ -31,13 +31,11 @@
         var options = {
             xaxis: {
                 mode: 'time',
-                timeformat: '%S',
-                axisLabel: 'Time'
+                axisLabel: 'Time',
+                timeformat: '%S'
             },
             yaxis: {
                 axisLabel: 'BPM',
-                min: 65,
-                max: 75
             },
             colors: ["#26B99A"]
         };
@@ -45,33 +43,23 @@
         function translateToFlot(item) {
             var time = new Date(item.date).getTime();
             var bpm = item.bpm;
-            return [[time, bpm]];
+            return [time, bpm];
         }
 
-        function randomPush() {
-            data.shift();
+        $(document).ready(function() {
+            $.get('/api/user/find', {id: 1}, function(res) {
+                console.log(res.data.bpms.length);
+                data = $.map(res.data.bpms, function(d) { return [translateToFlot(d)];});
+                $.plot($("#realtime-graph"), [data], options);
 
-            while(data.length < len) {
-                var y = Math.random() * 1.7 + 69;
-                var x = new Date(Date.now()).getTime() + 50 * (data.length - len);
-                data.push([x, y]);
-            }
-        }
+                socket.on('update', function (bpm) {
+                    if (data.length > 10)
+                        data.shift();
 
-        function update() {
-            randomPush();
-
-            $.plot($("#realtime-graph"), [data], options);
-            setTimeout(update, 150);
-        }
-
-        socket.on('update', function (data) {
-            console.log(data);
-        })
-
-        $(document).ready(function () {
-
-            update();
+                    data.push(translateToFlot(bpm));
+                    $.plot($("#realtime-graph"), [data], options);
+                });
+            });
         });
     });
 </script>
