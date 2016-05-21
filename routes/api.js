@@ -36,24 +36,22 @@ router.post('/api/user/register', function (req, res) {
     })
 })
 
-router.post('/api/bpm/update', function (req, res) {
-    var id = req.body.id;
-    var interval = parseInt(req.body.interval);
-    var timestamp = parseInt(req.body.timestamp);
-    var bpms = req.body.bpms;
-
-    if (!id || !interval || !timestamp || !bpms) {
+router.post('/api/bpm/update', function(req, res) {
+    if (!req.body.hasOwnProperty('id')
+        || !req.body.hasOwnProperty('interval')
+        || !req.body.hasOwnProperty('timestamp')
+        || !req.body.hasOwnProperty('frames')
+        || !req.body.hasOwnProperty('data')) {
         res.json({status: 'error', message: 'Invalid data'});
         return;
     }
+    var id = req.body.id;
+    var interval = parseInt(req.body.interval);
+    var timestamp = parseInt(req.body.timestamp);
+    var frames = parseInt(req.body.frames);
+    var bpms = req.body.data;
 
-    bpms = JSON.parse(bpms);
-    if (bpms.length < 1) {
-        res.json({status: 'error', message: 'Should post at least one bpm'});
-        return;
-    }
-
-    User.findOne({deviceId: id}, function (err, user) {
+    User.findOne({deviceId: id}, function(err, user) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
@@ -62,8 +60,13 @@ router.post('/api/bpm/update', function (req, res) {
             res.json({status: 'error', message: 'User not found'});
             return;
         }
+        if(frames != Object.keys(req.body.data).length || frames < 1) {
+            res.json({status: 'error', message: 'Invalid frame length'});
+            return;
+        }
 
-        for (var i = 0; i < bpms.length; i++) {
+        for(var i = 0; i < frames; i++)
+        {
             timestamp += interval;
             var data = new Bpm({
                 date: timestamp * 1000,                                 // convert to milliseconds
