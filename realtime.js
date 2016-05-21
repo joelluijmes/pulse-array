@@ -5,7 +5,7 @@ module.exports.onConnection = function(socket) {
     sockets.push(socket);
 
     socket.on('disconnect', function() {
-        sockets.splice(sockets.indexof(socket), 1);
+        sockets.splice(sockets.indexOf(socket), 1);
     })
 };
 

@@ -1,5 +1,5 @@
 var express = require('express');
-var realtime = require('realtime');
+var realtime = require('../realtime');
 var Bpm = require('../models/bpm');
 var User = require('../models/user');
 

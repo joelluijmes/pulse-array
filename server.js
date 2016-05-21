@@ -5,7 +5,7 @@ var express = require('express'),
     api = require('./routes/api'),
     path = require('path'),
     fs = require('fs'),
-    realtime = require('realtime');
+    realtime = require('./realtime.js');
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
@@ -51,7 +51,7 @@ app.use(function (err, req, res, next) {
 
 mongoose.connect('mongodb://localhost/pulse-array');
 
-io.on('connection', server.onConnection);
+io.on('connection', realtime.onConnection);
 
 server.listen(app.get('port'), function() {
     console.log('Express server on port ' + app.get('port'));

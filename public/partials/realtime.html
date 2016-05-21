@@ -24,7 +24,7 @@
 
 <script>
     $(function () {
-        var soccket = io();
+        var socket = io();
 
         var data = [];
         var len = 60;
@@ -64,6 +64,10 @@
             $.plot($("#realtime-graph"), [data], options);
             setTimeout(update, 150);
         }
+
+        socket.on('update', function (data) {
+            console.log(data);
+        })
 
         $(document).ready(function () {
 
