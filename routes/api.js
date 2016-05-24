@@ -49,7 +49,7 @@ router.post('/api/bpm/update', function(req, res) {
     var interval = parseInt(req.body.interval);
     var timestamp = parseInt(req.body.timestamp);
     var frames = parseInt(req.body.frames);
-    var bpms = req.body.data;
+    var bpms = req.body.bpms;
 
     User.findOne({deviceId: id}, function(err, user) {
         if (err) {
@@ -60,7 +60,7 @@ router.post('/api/bpm/update', function(req, res) {
             res.json({status: 'error', message: 'User not found'});
             return;
         }
-        if(frames != Object.keys(req.body.data).length || frames < 1) {
+        if(frames != bpms.length || frames < 1) {
             res.json({status: 'error', message: 'Invalid frame length'});
             return;
         }
