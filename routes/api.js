@@ -40,15 +40,13 @@ router.post('/api/bpm/update', function(req, res) {
     if (!req.body.hasOwnProperty('id')
         || !req.body.hasOwnProperty('interval')
         || !req.body.hasOwnProperty('timestamp')
-        || !req.body.hasOwnProperty('frames')
-        || !req.body.hasOwnProperty('data')) {
+        || !req.body.hasOwnProperty('bpms')) {
         res.json({status: 'error', message: 'Invalid data'});
         return;
     }
     var id = req.body.id;
     var interval = parseInt(req.body.interval);
     var timestamp = parseInt(req.body.timestamp);
-    var frames = parseInt(req.body.frames);
     var bpms = req.body.bpms;
 
     User.findOne({deviceId: id}, function(err, user) {
@@ -60,12 +58,12 @@ router.post('/api/bpm/update', function(req, res) {
             res.json({status: 'error', message: 'User not found'});
             return;
         }
-        if(frames != bpms.length || frames < 1) {
+        if(bpms.length < 1) {
             res.json({status: 'error', message: 'Invalid frame length'});
             return;
         }
 
-        for(var i = 0; i < frames; i++)
+        for(var i = 0; i < bpms.length; i++)
         {
             timestamp += interval;
             var data = new Bpm({
