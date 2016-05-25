@@ -5,12 +5,10 @@ var express = require('express'),
     api = require('./routes/api'),
     path = require('path'),
     fs = require('fs'),
-    realtime = require('./realtime.js');
+    sockets = require('./sockets.js');
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname + '/public'));
@@ -49,10 +47,10 @@ app.use(function (err, req, res, next) {
     });
 });
 
+
 mongoose.connect('mongodb://localhost/pulse-array');
 
-io.on('connection', realtime.onConnection);
-
+sockets.startServer(server);
 server.listen(app.get('port'), function() {
     console.log('Express server on port ' + app.get('port'));
 });

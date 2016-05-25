@@ -1,5 +1,5 @@
 var express = require('express');
-var realtime = require('../realtime');
+var sockets = require('../sockets');
 var Bpm = require('../models/bpm');
 var User = require('../models/user');
 
@@ -47,7 +47,7 @@ router.post('/api/bpm/update', function(req, res) {
     var id = req.body.id;
     var interval = parseInt(req.body.interval);
     var timestamp = parseInt(req.body.timestamp);
-    var bpms = req.body.bpms;
+    var bpms = JSON.parse(req.body.bpms);
 
     User.findOne({deviceId: id}, function(err, user) {
         if (err) {
@@ -72,7 +72,8 @@ router.post('/api/bpm/update', function(req, res) {
             });
 
             user.bpms.push(data);
-            realtime.broadcast({date: data.date, bpm: data.bpm});
+            // TODO: UPdate graph
+            // realtime.broadcast({date: data.date, bpm: data.bpm});
         }
 
         user.save(function (err) {
@@ -113,7 +114,7 @@ router.get('/api/user/list/', function (req, res) {
 
         res.json({status: 'success', data: users});
     });
-})
+});
 
 
 router.get('/api/*', function (req, res) {

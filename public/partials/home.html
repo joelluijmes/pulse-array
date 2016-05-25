@@ -1,3 +1,28 @@
+<!-- top tiles -->
+<div class="row tile_count">
+    <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+        <div id="totalUsers" class="count">2</div>
+        <span class="count_bottom">Registered with a device</span>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Viewers</span>
+        <div id="onlineViewers" class="count">2</div>
+        <span class="count_bottom">Online viewers</span>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> Average Heartbeat</span>
+        <div id="avgHeartbeat" class="count">76,4</div>
+        <span class="count_bottom">From all users</span>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Total Heartbeats</span>
+        <div id="totalHeartbeat" class="count">2,315</div>
+        <span class="count_bottom">From last time</span>
+    </div>
+</div>
+<!-- /top tiles -->
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="dashboard_graph">
@@ -21,3 +46,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+
+
+        socket.on('totalUsers', function(res) {
+            $('#totalUsers').html(res);
+        });
+
+        socket.on('onlineViewers', function(res) {
+            $('#onlineViewers').html(res);
+        });
+
+        socket.on('avgHeartbeat', function(res) {
+            var avg = res.toFixed(1).toString().replace('.', ',');
+            $('#avgHeartbeat').html(avg);
+        });
+
+        socket.on('totalHeartbeat', function(res) {
+            $('#totalHeartbeat').html(res);
+        });
+    });
+</script>
