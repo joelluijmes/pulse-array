@@ -36,7 +36,7 @@ router.post('/api/user/register', function (req, res) {
     })
 })
 
-router.post('/api/bpm/update', function(req, res) {
+router.post('/api/bpm/update', function (req, res) {
     if (!req.body.hasOwnProperty('id')
         || !req.body.hasOwnProperty('interval')
         || !req.body.hasOwnProperty('timestamp')
@@ -49,7 +49,7 @@ router.post('/api/bpm/update', function(req, res) {
     var timestamp = parseInt(req.body.timestamp);
     var bpms = JSON.parse(req.body.bpms);
 
-    User.findOne({deviceId: id}, function(err, user) {
+    User.findOne({deviceId: id}, function (err, user) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
@@ -58,13 +58,12 @@ router.post('/api/bpm/update', function(req, res) {
             res.json({status: 'error', message: 'User not found'});
             return;
         }
-        if(bpms.length < 1) {
+        if (bpms.length < 1) {
             res.json({status: 'error', message: 'Invalid frame length'});
             return;
         }
 
-        for(var i = 0; i < bpms.length; i++)
-        {
+        for (var i = 0; i < bpms.length; i++) {
             timestamp += interval;
             var data = new Bpm({
                 date: timestamp * 1000,                                 // convert to milliseconds
@@ -87,23 +86,45 @@ router.post('/api/bpm/update', function(req, res) {
     });
 });
 
-router.get('/api/user/find', function (req, res) {
+router.get('/api/bpms/fetch/', function (req, res) {
     var id = req.query.id;
+    var begin = req.query.start || new Date(0);
+    var end = req.query.end || new Date();
+    var limit = Number(req.query.limit) || 10;
+    var order = req.query.order;
 
-    if (!id) {
+    if (typeof(id) === 'undefined') {
         res.json({status: 'error', message: 'No id given'});
         return;
     }
 
-    User.findOne({deviceId: id}, {bpms: { $slice: -10}}, function (err, user) {
+    order = (order === 'asc') ? 1 : -1;
+
+    User.aggregate([
+        {$match: {'deviceId': Number(id)}},
+        {$project: {'bpms': 1}},
+        {$unwind: '$bpms'},
+        {
+            $match: {
+                'bpms.date': {
+                    '$gte': begin,
+                    '$lte': end
+                }
+            }
+        },
+        {$sort: {'bpms.date': order}},
+        {$limit: limit}
+    ], function (err, data) {
         if (err) {
             res.json({status: 'error', message: err});
             return;
         }
 
-        res.json({status: 'success', data: user});
+        res.json({status: 'success', data: data});
     });
+
 });
+
 
 router.get('/api/user/list/', function (req, res) {
     User.find({}, 'username deviceId', function (err, users) {

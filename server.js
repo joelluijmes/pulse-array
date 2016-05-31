@@ -37,6 +37,12 @@ if (app.get('env') === 'development') {
             error: err
         });
     });
+
+    mongoose.set('debug', true);
+
+    mongoose.set('debug', function (coll, method, query, doc) {
+        console.log(query);
+    });
 }
 
 app.use(function (err, req, res, next) {

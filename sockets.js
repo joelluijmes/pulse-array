@@ -9,6 +9,9 @@ function broadcast(name, data) {
 }
 
 function updateStatistics() {
+    if (onlineViewers === 0)
+        return;
+
     User.aggregate([
         {
             $group: {
