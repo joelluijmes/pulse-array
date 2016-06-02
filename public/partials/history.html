@@ -16,8 +16,10 @@
                 </div>
             </div>
 
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                ...
+            <div class="x_content">
+                <div class="container" style="height:250px">
+                    <div id="graph" style="width: 100%; height:250px;"></div>
+                </div>
             </div>
 
             <div class="clearfix"></div>
@@ -27,9 +29,43 @@
 
 <script src="../js/moment.min.js"></script>
 <script src="../js/daterangepicker.js"></script>
+<script src="../bower_components/Flot/jquery.flot.js"></script>
+<script src="../bower_components/Flot/jquery.flot.time.js"></script>
+<script src="../bower_components/Flot/jquery.flot.resize.js"></script>
+<script src="../js/jquery.flot.axislabels.js"></script>
 
 <script>
+    var data = [];
+    var options = {
+        xaxis: {
+            mode: 'time',
+            axisLabel: 'Time',
+            timezone: 'browser'
+        },
+        yaxis: {
+            axisLabel: 'BPM',
+        },
+        colors: ["#26B99A"],
+    };
+
+    function translateToFlot(item) {
+        var time = new Date(item.bpms.date).getTime();
+        var bpm = item.bpms.bpm;
+
+        return [time, bpm];
+    }
+
+    function updateGraph(startDate, endDate) {
+        var url = '/api/bpms/fetch?id=1&start=' + startDate.getTime() + '&end=' + endDate.getTime();
+
+        $.get(url, function(res) {
+            data = $.map(res.data, function(d) { return [translateToFlot(d)];});
+            $.plot($("#graph"), [data], options);
+        });
+    }
+
     $(document).ready(function() {
+        updateGraph(new Date(0), new Date());
 
         var cb = function(start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
@@ -39,8 +75,8 @@
         var optionSet1 = {
             startDate: moment().subtract(29, 'days'),
             endDate: moment(),
-            minDate: '01/01/2012',
-            maxDate: '12/31/2015',
+            minDate: '01/01/2016',
+            maxDate: '12/31/2016',
             dateLimit: {
                 days: 60
             },
@@ -83,7 +119,7 @@
             console.log("hide event fired");
         });
         $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-            console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+            updateGraph(new Date(picker.startDate), new Date(picker.endDate));
         });
         $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
             console.log("cancel event fired");

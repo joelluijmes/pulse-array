@@ -88,8 +88,8 @@ router.post('/api/bpm/update', function (req, res) {
 
 router.get('/api/bpms/fetch/', function (req, res) {
     var id = req.query.id;
-    var begin = req.query.start || new Date(0);
-    var end = req.query.end || new Date();
+    var begin = Number(req.query.start) || 0;
+    var end = Number(req.query.end) || -1;
     var limit = Number(req.query.limit) || 10;
     var order = req.query.order;
 
@@ -107,8 +107,8 @@ router.get('/api/bpms/fetch/', function (req, res) {
         {
             $match: {
                 'bpms.date': {
-                    '$gte': begin,
-                    '$lte': end
+                    '$gte': new Date(begin),
+                    '$lte': (end === -1) ? new Date() : new Date(end)
                 }
             }
         },

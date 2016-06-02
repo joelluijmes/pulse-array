@@ -38,11 +38,11 @@ if (app.get('env') === 'development') {
         });
     });
 
-    mongoose.set('debug', true);
+    //mongoose.set('debug', true);
 
-    mongoose.set('debug', function (coll, method, query, doc) {
-        console.log(query);
-    });
+    // mongoose.set('debug', function (coll, method, query, doc) {
+    //     console.log(query);
+    // });
 }
 
 app.use(function (err, req, res, next) {
