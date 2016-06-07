@@ -8,10 +8,14 @@
                     </h3>
                 </div>
             </div>
-            <div class="x_content">
-                <div class="container" style="height:250px">
-                    <div id="realtime-graph" style="width: 100%; height:250px;"></div>
-                </div>
+            <div class="row">
+                <!--<div class="col-md-3">-->
+                    <div class="container" style="height:250px">
+                        <div id="graph" style="width: 100%; height:250px;"></div>
+                    </div>
+                <!--</div>-->
+                
+
             </div>
         </div>
     </div>
@@ -24,42 +28,79 @@
 
 <script>
     $(function () {
-        var socket = io();
-
-        var data = [];
-        var len = 60;
+        var graph = $('#graph');
         var options = {
             xaxis: {
-                mode: 'time',
-                axisLabel: 'Time',
-                timeformat: '%S'
+                min: 0,
+                max: 100,
+                ticks: 10,
+                tickFormatter: function (val, axis) {
+                    return "";
+                }
             },
             yaxis: {
-                axisLabel: 'BPM',
+                ticks: 5,
+                tickFormatter: function (val, axis) {
+                    return "";
+                }
             },
             colors: ["#26B99A"]
         };
 
-        function translateToFlot(item) {
-            var time = new Date(item.date).getTime();
-            var bpm = item.bpm;
-            return [time, bpm];
+        var beats = 30;
+
+        function updateOptions(width) {
+            if (width < 600) {
+                options.xaxis.max = 50;
+            } else if (width < 1100) {
+                options.xaxis.max = 100;
+            } else {
+                options.xaxis.max = 200;
+            }
+
+            options.xaxis.ticks = options.xaxis.max / 10;
+            plot = $.plot(graph, [], options);
         }
 
-        $(document).ready(function() {
-            $.get('/api/user/find', {id: 1}, function(res) {
-                console.log(res.data.bpms.length);
-                data = $.map(res.data.bpms, function(d) { return [translateToFlot(d)];});
-                $.plot($("#realtime-graph"), [data], options);
-
-                socket.on('update', function (bpm) {
-                    if (data.length > 10)
-                        data.shift();
-
-                    data.push(translateToFlot(bpm));
-                    $.plot($("#realtime-graph"), [data], options);
-                });
-            });
+        updateOptions(graph.width());
+        graph.resize(function () {
+            updateOptions($(this).width());
         });
+
+        var plot = $.plot(graph, [], options);
+
+        function showHeartbeats(num, spacing, offset) {
+            var beat = [[0, 5], [1, 7], [2, 5], [4, 5], [5, 4], [8, 16], [9.5, 1], [13, 5]];
+            var last = beat[beat.length - 1][0];
+
+            var data = [];
+            for (var i = 0; i < num; ++i) {
+                var current = $.map(beat, function (x) {
+                    var displacement = i * (spacing + last) + offset;
+
+                    return [[x[0] + displacement, x[1]]];
+                });
+
+                data = data.concat(current);
+            }
+
+            plot.setData([data]);
+            plot.setupGrid();
+            plot.draw();
+        }
+
+        var displacement = 0;
+        var delay = 25;
+        setInterval(function () {
+            var bpm = 75;//Number($('#bpm').val());
+            var spacing = 1 / (bpm / 60) * 1000 / delay - 13;
+
+            showHeartbeats(beats, spacing, --displacement);
+
+            if (displacement < -(spacing + 13))
+                displacement = 0;
+        }, delay);
+
+
     });
 </script>
