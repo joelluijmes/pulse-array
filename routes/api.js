@@ -71,8 +71,7 @@ router.post('/api/bpm/update', function (req, res) {
             });
 
             user.bpms.push(data);
-            // TODO: UPdate graph
-            // realtime.broadcast({date: data.date, bpm: data.bpm});
+            sockets.broadcast('liveUpdate', {date: data.date, bpm: data.bpm});
         }
 
         user.save(function (err) {
