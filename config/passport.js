@@ -5,9 +5,6 @@ var LocalStrategy = require('passport-local').Strategy;
 // user model
 var User = require('../app/models/user');
 
-// auth variables
-var configAuth = require('./auth');
-
 module.exports = function(passport) {
     // =================================
     // SETUP ===========================
@@ -38,11 +35,14 @@ module.exports = function(passport) {
             // we are checking to see if the user trying to login already exists
             User.findOne({'local.username': username}, function (err, user) {
                 // if there are any errors, return the error
-                if (err)
+                if (err) {
+                    console.log(err);
                     return done(err);
+                }
 
                 // check to see if theres already a user with that email
                 if (user) {
+                    console.log('User registration failed: user already exists')
                     return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
                 } else {
 
@@ -56,8 +56,10 @@ module.exports = function(passport) {
 
                     // save the user
                     newUser.save(function (err) {
-                        if (err)
+                        if (err) {
+                            console.log('Error saving registration: ' + err)
                             throw err;
+                        }
                         return done(null, newUser);
                     });
                 }

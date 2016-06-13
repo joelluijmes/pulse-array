@@ -27,16 +27,17 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
             <section class="login_content">
+
                 <form action="/login" method="post">
                     <h1>Login Form</h1>
                     <div>
-                        <input type="text" class="form-control" placeholder="Username" required=""/>
+                        <input type="text" class="form-control" placeholder="Username" name="username" required=""/>
                     </div>
                     <div>
-                        <input type="password" class="form-control" placeholder="Password" required=""/>
+                        <input type="password" class="form-control" placeholder="Password" name="password" required=""/>
                     </div>
                     <div>
-                        <a class="btn btn-default submit" href="index.html">Log in</a>
+                        <button class="btn btn-default submit">Log in</button>
                     </div>
 
                     <div class="clearfix"></div>
@@ -61,19 +62,19 @@
 
         <div id="register" class="animate form registration_form">
             <section class="login_content">
-                <form>
+                <form action="/signup" method="post">
                     <h1>Create Account</h1>
                     <div>
-                        <input type="text" class="form-control" placeholder="Username" required=""/>
+                        <input type="text" class="form-control" placeholder="Username" name="username" required=""/>
                     </div>
                     <div>
-                        <input type="email" class="form-control" placeholder="Email" required=""/>
+                        <input type="text" class="form-control" placeholder="Device id (can be empty)" name="deviceId"/>
                     </div>
                     <div>
-                        <input type="password" class="form-control" placeholder="Password" required=""/>
+                        <input type="password" class="form-control" placeholder="Password" name="password" required=""/>
                     </div>
                     <div>
-                        <a class="btn btn-default submit" href="index.html">Submit</a>
+                        <button class="btn btn-default submit">Submit</button>
                     </div>
 
                     <div class="clearfix"></div>
