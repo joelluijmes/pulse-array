@@ -1,62 +1,37 @@
-var express = require('express'),
-    bodyParser = require('body-parser'),
-    mongoose = require('mongoose'),
-    methodOverride = require('method-override'),
-    api = require('./routes/api'),
-    path = require('path'),
-    fs = require('fs'),
-    sockets = require('./sockets.js');
+// server.js
 
-var app = module.exports = express();
-var server = require('http').createServer(app);
+// set up ======================================================================
+// get all the tools we need
+var express     = require('express');
+var app         = express();
+var port        = process.env.PORT || 3000;
+var mongoose    = require('mongoose');
+var server      = require('http').createServer(app);
 
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname + '/public'));
-app.set('view engine', 'ejs');
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var path         = require('path');
 
-app.engine('html', require('ejs').renderFile);
+var configDB    = require('./config/database.js');
+var sockets     = require('./app/sockets.js');
 
-app.use(bodyParser.json());
+// configuration ===============================================================
+mongoose.connect(configDB.url); // connect to our database
+
+// set up our express application
+app.use(morgan('dev'));                                 // log every request to the console
+app.use(cookieParser());                                // read cookies (needed for auth)
+app.use(bodyParser.json());                             // html forms
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));// static content
 
-app.use('/', api);
-app.get('*', function(req, res) {
-    fs.readFile(__dirname + '/public/index.html', 'utf8', function(err, content) {
-        res.send(content);
-    });
-});
+// routes ======================================================================
+require('./app/api')(app);
+require('./app/routes.js')(app);
 
-
-if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.json({
-            message: err.message,
-            error: err
-        });
-    });
-
-    //mongoose.set('debug', true);
-
-    // mongoose.set('debug', function (coll, method, query, doc) {
-    //     console.log(query);
-    // });
-}
-
-app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.json({
-        message: err.message,
-        error: {}
-    });
-});
-
-
-mongoose.connect('mongodb://localhost/pulse-array');
-
+// launch ======================================================================
 sockets.startServer(server);
-server.listen(app.get('port'), function() {
-    console.log('Express server on port ' + app.get('port'));
+server.listen(port, function() {
+    console.log('Express server on port ' + port);
 });
