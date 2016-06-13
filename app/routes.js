@@ -5,7 +5,7 @@ var fs = require('fs');
 module.exports = function (app, passport) {
 
     // =================================
-    // LOGIN =========================
+    // LOGIN ===========================
     // =================================
     // serves the login html page
     app.get('/login', function(req, res) {
@@ -25,6 +25,21 @@ module.exports = function (app, passport) {
         failureRedirect : '/login#signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+
+    // =================================
+    // GOOGLE ROUTES ===================
+    // =================================
+    // send to google to do the authentication
+    // profile gets us their basic information including their name
+    // email gets their emails
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+    // the callback after google has authenticated the user
+    app.get('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }));
 
     // =================================
     // STATIC CONTENT ==================

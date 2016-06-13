@@ -11,6 +11,12 @@ var userSchema = mongoose.Schema({
         username     : String,
         password     : String
     },
+    google           : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    },
     bpms: [BpmModel.schema],
     deviceId: Number
 });
