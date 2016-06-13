@@ -4705,20 +4705,79 @@ a.hiddenanchor {
   animation-fill-mode: both;
 }
 
-/********* /login ***************/
+/** login **/
+.login {
+  background:#F7F7F7;
+}
+.login .fa-paw {
+  font-size: 26px;
+}
+a.hiddenanchor {
+  display: none;
+}
+.login_wrapper {
+  right: 0px;
+  margin: 0px auto;
+  margin-top: 5%;
+  max-width: 350px;
+  position: relative;
+}
+.registration_form, .login_form {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+.registration_form {
+  z-index: 21;
+  opacity: 0;
+  width: 100%;
+}
+.login_form {
+  z-index: 22;
+}
+#signup:target ~ .login_wrapper .registration_form, #signin:target ~ .login_wrapper .login_form {
+  z-index: 22;
+  -webkit-animation-name: fadeInLeft;
+  -moz-animation-name: fadeInLeft;
+  -ms-animation-name: fadeInLeft;
+  -o-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+  -webkit-animation-delay: .1s;
+  -moz-animation-delay: .1s;
+  -o-animation-delay: .1s;
+  -ms-animation-delay: .1s;
+  animation-delay: .1s;
+}
+#signup:target ~ .login_wrapper .login_form, #signin:target ~ .login_wrapper .registration_form {
+  -webkit-animation-name: fadeOutLeft;
+  -moz-animation-name: fadeOutLeft;
+  -ms-animation-name: fadeOutLeft;
+  -o-animation-name: fadeOutLeft;
+  animation-name: fadeOutLeft;
+}
+.animate {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-timing-function: ease;
+  -moz-animation-fill-mode: both;
+  -o-animation-duration: 0.5s;
+  -o-animation-timing-function: ease;
+  -o-animation-fill-mode: both;
+  -ms-animation-duration: 0.5s;
+  -ms-animation-timing-function: ease;
+  -ms-animation-fill-mode: both;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+}
+/** /login **/
 
-
-/********** sign in ***************************/
-
+/** signup **/
 .login_box {
   padding: 20px;
   margin: auto;
-}
-a {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
 }
 .left {
   float: left;
@@ -4745,6 +4804,13 @@ a:hover {
   text-align: center;
   text-shadow: 0 1px 0 #fff;
   min-width: 280px;
+}
+.login_content a,
+.login_content .btn-default:hover {
+  text-decoration: none;
+}
+.login_content a:hover {
+  text-decoration: underline;
 }
 .login_content h1 {
   font: normal 25px Helvetica, Arial, sans-serif;
@@ -4817,11 +4883,6 @@ a:hover {
   -ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
   -o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
   box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -ms-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
   border: 1px solid #c8c8c8;
   color: #777;
   margin: 0 0 20px;
@@ -4904,8 +4965,7 @@ a:hover {
 header {
   width: 100%;
 }
-
-/********** end of sign in ********************/
+/** signup **/
 
 
 /* *********  start nprogress  **************************** */

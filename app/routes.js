@@ -4,6 +4,12 @@ var fs = require('fs');
 
 module.exports = function (app) {
 
+    app.get('/login', function(req, res) {
+        fs.readFile(__dirname + '/../public/login.html', 'utf8', function(err, content) {
+            res.send(content);
+        });
+    });
+
     // =================================
     // STATIC CONTENT ==================
     // =================================
