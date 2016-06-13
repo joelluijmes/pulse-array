@@ -37,7 +37,7 @@ module.exports = function (app, passport) {
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
         passport.authenticate('google', {
-            successRedirect : '/profile',
+            successRedirect : '/home',
             failureRedirect : '/'
         }));
 
@@ -61,5 +61,5 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/login');
 }
