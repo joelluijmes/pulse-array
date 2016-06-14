@@ -35,11 +35,6 @@ module.exports = function(passport) {
         passReqToCallback: true // allows us to pass back the entire request to the callback
     }, function(req, username, password, done) {
         process.nextTick(function() {
-            var id = Number(req.body.deviceId);
-            if (id === undefined || !id) {
-                return done(null, false, req.flash('message', 'Invalid device id.'));
-            }
-
             // find a user with username
             // we are checking to see if the user trying to login already exists
             User.findOne({'local.username': username}, function (err, user) {
@@ -62,7 +57,6 @@ module.exports = function(passport) {
                     // set the user's local credentials
                     newUser.local.username = username;
                     newUser.local.password = newUser.generateHash(password);
-                    newUser.deviceId = id;
 
                     // save the user
                     newUser.save(function (err) {

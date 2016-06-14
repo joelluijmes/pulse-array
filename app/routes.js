@@ -33,6 +33,15 @@ module.exports = function (app, passport) {
         res.render('complete.ejs');
     });
 
+    app.post('/complete', isLoggedIn, function(req, res) {
+        var id = req.body.deviceId;
+
+        req.user.deviceId = id;
+        req.user.save();
+
+        res.redirect('/');
+    })
+
     // =================================
     // GOOGLE ROUTES ===================
     // =================================
@@ -96,7 +105,8 @@ function isLoggedIn(req, res, next) {
 function isRegistered(req, res, next) {
     if (!req.isAuthenticated()) {
         res.redirect('/login');
-    } else if (typeof(req.user.deviceId) === undefined || req.user.deviceId === 0) {
+    }
+    if (typeof(req.user.deviceId) === 'undefined' || req.user.deviceId === 0) {
         res.redirect('/complete');
     }
 
