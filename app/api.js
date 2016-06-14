@@ -85,6 +85,7 @@ module.exports = function (app) {
 
         // 1 is ascending, -1 is descending
         order = (order === 'asc') ? 1 : -1;
+        limit = (limit === -1) ? 100000 : 0;
 
         User.aggregate([
             {$match: {'deviceId': Number(id)}},     // where matches the device id
