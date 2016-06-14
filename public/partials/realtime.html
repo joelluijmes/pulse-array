@@ -34,6 +34,7 @@
 <script>
     $(function () {
         var graph = $('#realtime-graph');
+
         var options = {
             xaxis: {
                 min: 0,
@@ -51,8 +52,10 @@
             },
             colors: ["#26B99A"]
         };
+        var plot = $.plot(graph, [], options);
 
-        var beats = 30;
+
+        var beats = 18;
 
         function updateOptions(width) {
             if (width < 600) {
@@ -69,10 +72,10 @@
 
         updateOptions(graph.width());
         graph.resize(function () {
+
             updateOptions($(this).width());
         });
 
-        var plot = $.plot(graph, [], options);
         var bpm = 0;
 
         function showHeartbeats(num, spacing, offset) {
@@ -81,35 +84,45 @@
 
             var data = [];
 
-            if (bpm === 0) {
-                data = [[0, 5], [options.xaxis.max, 5]];
-            } else {
-                for (var i = 0; i < num; ++i) {
-                    var current = $.map(beat, function (x) {
-                        var displacement = i * (spacing + last) + offset;
+            for (var i = 0; i < num; ++i) {
+                var current = $.map(beat, function (x) {
+                    var displacement = i * (spacing + last) + offset;
 
-                        return [[x[0] + displacement, x[1]]];
-                    });
+                    return [[x[0] + displacement, x[1]]];
+                });
 
-                    data = data.concat(current);
-                }
+                data = data.concat(current);
             }
 
             plot.setData([data]);
-            plot.setupGrid();
             plot.draw();
+            plot.setupGrid();
         }
 
         var displacement = 0;
-        var delay = 25;
+        var delay = 30;
 
         setInterval(function () {
-            var spacing = 1 / (bpm / 60) * 1000 / delay - 13;
+            if (bpm === 0) {
+                if (delay !== 500) {
+                    var data = [[0, 5], [options.xaxis.max, 5]];
 
-            showHeartbeats(beats, spacing, --displacement);
+                    plot.setData([data]);
+                    plot.setupGrid();
+                    plot.draw();
+                }
 
-            if (displacement < -(spacing + 13))
-                displacement = 0;
+                delay = 500;
+            } else {
+                delay = 30;
+
+                var spacing = 1 / (bpm / 60) * 1000 / delay - 13;
+
+                showHeartbeats(beats, spacing, --displacement);
+
+                if (displacement < -(spacing + 13))
+                    displacement = 0;
+            }
         }, delay);
 
         function setBpm(val) {
