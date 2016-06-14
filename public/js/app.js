@@ -5,31 +5,33 @@ angular.module('myApp', ['ui.router'])
 
         $stateProvider
             .state('overview', {
-                //abstract: true,
                 url: '/overview',
-                //templateUrl: '../partials/overview.html',
                 views: {
                     mainModule: {
-                        templateUrl: '../partials/overview.html'
+                        templateUrl: '/partials/overview.html'
                     },
                     'realtime@overview': {
-                        templateUrl: '../partials/realtime.html'
+                        templateUrl: '/partials/realtime.html'
                     },
                     'history@overview': {
-                        templateUrl: '../partials/history.html'
+                        templateUrl: '/partials/history.html'
                     }
                 }
             })
-            .state('overview.realtime', {
-                url: '/realtime',
-                templateUrl: '../partials/realtime.html'
-            })
             .state('realtime', {
                 url: '/realtime',
-                templateUrl: '../partials/realtime.html'
+                views: {
+                    mainModule: {
+                        templateUrl: '/partials/realtime.html'
+                    }
+                }
             })
             .state('history', {
                 url: '/history',
-                templateUrl: '../partials/history.html'
+                views: {
+                    mainModule: {
+                        templateUrl: '/partials/history.html'
+                    }
+                }
             });
     });

@@ -25,34 +25,34 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="dashboard_graph">
 
+        <div class="row">
             <div ui-view="realtime"></div>
-            <div ui-view="history"></div>
-
-            <div class="clearfix"></div>
         </div>
+
+        <div class="row">
+            <div ui-view="history"></div>
+        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
 
 <script>
-    $(function() {
-
-
-        socket.on('totalUsers', function(res) {
+    $(function () {
+        socket.on('totalUsers', function (res) {
             $('#totalUsers').html(res);
         });
 
-        socket.on('onlineViewers', function(res) {
+        socket.on('onlineViewers', function (res) {
             $('#onlineViewers').html(res);
         });
 
-        socket.on('avgHeartbeat', function(res) {
+        socket.on('avgHeartbeat', function (res) {
             var avg = res.toFixed(1).toString().replace('.', ',');
             $('#avgHeartbeat').html(avg);
         });
 
-        socket.on('totalHeartbeat', function(res) {
+        socket.on('totalHeartbeat', function (res) {
             $('#totalHeartbeat').html(res);
         });
     });
