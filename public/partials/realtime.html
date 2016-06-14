@@ -125,11 +125,13 @@
         }
 
         $.get('/api/bpms/fetch?id=1&limit=1', function (res) {
-            if (!res.data || res.data.length === 0) {
-                setBpm(0);
-            } else {
-                setBpm(res.data[0].bpms.bpm);
+            if (res.data && res.data.length !== 0) {
+                var elapsed = new Date() - new Date(res.data[0].bpms.date);
+                if (elapsed < 3000)
+                    setBpm(res.data[0].bpms.bpm);
             }
+
+            setBpm(0);
         });
 
         var outdated = 0;
