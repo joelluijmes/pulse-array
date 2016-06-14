@@ -2,7 +2,7 @@
   "name": "pulse-array",
   "homepage": "https://github.com/joelluijmes/pulse-array",
   "authors": [
-    "Joël Luijmes <joelluijmes@gmail.com>"
+    "Joel Luijmes <joelluijmes@gmail.com>"
   ],
   "description": "",
   "main": "",
@@ -15,13 +15,15 @@
     "tests"
   ],
   "dependencies": {
+    "angular-ui-router": "^0.3.1",
+    "angular": "^1.5.5",
+    "animate.css": "^3.5.2",
     "angular-resource": "^1.5.5",
     "angular-route": "^1.5.5",
-    "Flot": "flot#^0.8.3",
-    "fontawesome": "~4.5.0",
     "bootstrap": ">=2",
-    "angular": "^1.5.5",
-    "PACE": "pace#^1.0.2",
-    "socket.io-client": "^1.4.6"
+    "fontawesome": "~4.5.0",
+    "Flot": "flot#^0.8.3",
+    "socket.io-client": "^1.4.6",
+    "PACE": "pace#^1.0.2"
   }
 }
