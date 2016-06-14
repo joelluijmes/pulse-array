@@ -24,6 +24,11 @@ module.exports = function (app, passport) {
         failureFlash: true // allow flash messages
     }));
 
+    app.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/login');
+    });
+
     // =================================
     // GOOGLE ROUTES ===================
     // =================================
