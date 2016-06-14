@@ -9,7 +9,7 @@ module.exports = function (app, passport) {
     // =================================
     // serves the login html page
     app.get('/login', function (req, res) {
-        res.render('login.ejs', {message: req.flash('loginMessage')});
+        res.render('login.ejs', {message: req.flash('message')});
     });
 
     app.post('/login', passport.authenticate('local-login', {
