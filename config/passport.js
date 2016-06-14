@@ -35,9 +35,14 @@ module.exports = function(passport) {
         passReqToCallback: true // allows us to pass back the entire request to the callback
     }, function(req, username, password, done) {
         process.nextTick(function() {
+            var id = Number(req.body.deviceId);
+            if (id === undefined) {
+                return done(null, false, req.flash('signupMessage', 'Invalid device id.'));
+            }
+
             // find a user with username
             // we are checking to see if the user trying to login already exists
-            User.findOne({'local.username': username}, function (err, user) {
+            User.findOne({'local.username': username, deviceId: Number(req.body.deviceId)}, function (err, user) {
                 // if there are any errors, return the error
                 if (err) {
                     console.log(err);
@@ -106,18 +111,17 @@ module.exports = function(passport) {
     // GOOGLE ==========================
     // =================================
     passport.use(new GoogleStrategy({
-            clientID        : configAuth.googleAuth.clientID,
-            clientSecret    : configAuth.googleAuth.clientSecret,
-            callbackURL     : configAuth.googleAuth.callbackURL
+            clientID            : configAuth.googleAuth.clientID,
+            clientSecret        : configAuth.googleAuth.clientSecret,
+            callbackURL         : configAuth.googleAuth.callbackURL,
+            passReqToCallback   : true
         },
-        function(token, refreshToken, profile, done) {
+        function(req, token, refreshToken, profile, done) {
 
-            // make the code asynchronous
-            // User.findOne won't fire until we have all our data back from Google
-            process.nextTick(function() {
-
+            // check if user is logged in
+            if (!req.user) {
                 // try to find the user based on their google id
-                User.findOne({ 'google.id' : profile.id }, function(err, user) {
+                User.findOne({'google.id': profile.id}, function (err, user) {
                     if (err)
                         return done(err);
 
@@ -127,23 +131,38 @@ module.exports = function(passport) {
                         return done(null, user);
                     } else {
                         // if the user isnt in our database, create a new user
-                        var newUser          = new User();
+                        var newUser = new User();
 
                         // set all of the relevant information
-                        newUser.google.id    = profile.id;
+                        newUser.google.id = profile.id;
                         newUser.google.token = token;
-                        newUser.google.name  = profile.displayName;
+                        newUser.google.name = profile.displayName;
                         newUser.google.email = profile.emails[0].value; // pull the first email
 
                         // save the user
-                        newUser.save(function(err) {
+                        newUser.save(function (err) {
                             if (err)
                                 throw err;
                             return done(null, newUser);
                         });
                     }
                 });
-            });
+            } else {
+                // user is logged in
+                var user = req.user;
 
+                // set all of the relevant information
+                user.google.id = profile.id;
+                user.google.token = token;
+                user.google.name = profile.displayName;
+                user.google.email = profile.emails[0].value; // pull the first email
+
+                user.save(function(err) {
+                    if (err)
+                        throw err;
+
+                    return done(null, user);
+                })
+            }
         }));
 };
