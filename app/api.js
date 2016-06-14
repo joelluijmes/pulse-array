@@ -1,5 +1,7 @@
 // app/api.js
 var User = require('./models/user');
+var Bpm = require('./models/bpm');
+var sockets = require('./sockets');
 
 module.exports = function (app) {
 
