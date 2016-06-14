@@ -66,7 +66,7 @@
                         <li class="">
                             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                <span><%- username %> (<%- deviceId %>)<span>
+                                <span><%- username %> (<%- deviceId %>)</span>
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
@@ -83,7 +83,7 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-            <div ng-view></div>
+            <div ui-view></div>
 
             <br>
 
@@ -104,8 +104,7 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="bower_components/PACE/pace.min.js"></script>
 <script src="bower_components/socket.io-client/socket.io.js"></script>
 
