@@ -103,11 +103,15 @@ function isLoggedIn(req, res, next) {
 }
 
 function isRegistered(req, res, next) {
+    console.log(req.url);
+
     if (!req.isAuthenticated()) {
         res.redirect('/login');
+        return;
     }
-    if (typeof(req.user.deviceId) === 'undefined' || req.user.deviceId === 0) {
+    if (typeof(req.user) === 'undefined' || typeof(req.user.deviceId) === 'undefined' || req.user.deviceId === 0) {
         res.redirect('/complete');
+        return;
     }
 
     return next();
