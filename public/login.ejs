@@ -25,6 +25,7 @@
 <div>
     <a class="hiddenanchor" id="signup"></a>
     <a class="hiddenanchor" id="signin"></a>
+    <a class="hiddenanchor" id="complete"></a>
 
     <div class="login_wrapper">
         <div class="animate form login_form">
@@ -51,8 +52,9 @@
                     <div class="clearfix"></div>
 
                     <div class="separator">
-                        <p class="change_link pull-left">New to site?
-                            <a href="#signup" class="to_register"> Create Account </a>
+                        <p class="change_link pull-left">
+                            <a href="#signup" class="to_register" style="margin-right: 0">Register </a>or
+                            <a href="/auth/google"> Signup with <span class="fa fa-google"></span>oogle </a>
                         </p>
                     </div>
                 </form>
@@ -73,12 +75,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">DeviceId</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" placeholder="Device Id" name="deviceId" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="password" class="form-control" placeholder="Password" name="password" required="">
@@ -89,14 +85,13 @@
                     <div class="form-group"></div>
 
                     <div class="pull-right">
-                        <!--<a href="/auth/google" class="btn btn-default"><span class="fa fa-google-plus"></span> Google</a>-->
                         <button class="btn btn-default submit">Register</button>
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="separator">
-                        <p class="change_link">Already a member ?
+                        <p class="change_link pull-left">Already a member ?
                             <a href="#signin" class="to_register"> Log in </a>
                         </p>
                     </div>

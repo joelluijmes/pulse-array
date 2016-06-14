@@ -29,6 +29,10 @@ module.exports = function (app, passport) {
         res.redirect('/login');
     });
 
+    app.get('/complete', isLoggedIn, function(req, res) {
+        res.render('complete.ejs');
+    });
+
     // =================================
     // GOOGLE ROUTES ===================
     // =================================
@@ -40,9 +44,11 @@ module.exports = function (app, passport) {
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
         passport.authenticate('google', {
-            successRedirect: '/home',
             failureRedirect: '/login'
-        }));
+        }), function(req, res) {
+            res.redirect('/');
+            //var x = req.query.username;
+        });
 
     // =====================================
     // AUTHORIZE ===========================
@@ -71,7 +77,7 @@ module.exports = function (app, passport) {
     // =================================
     // if it didn't match any of the previous rules, it is probably a page
     // if not we still give them the page (A)
-    app.get('*', isLoggedIn, function(req, res) {
+    app.get('*', isRegistered, function(req, res) {
         res.render('index.ejs', {username: req.user.local.username, deviceId: req.user.deviceId});
     });
 };
@@ -85,4 +91,14 @@ function isLoggedIn(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/login');
+}
+
+function isRegistered(req, res, next) {
+    if (!req.isAuthenticated()) {
+        res.redirect('/login');
+    } else if (typeof(req.user.deviceId) === undefined || req.user.deviceId === 0) {
+        res.redirect('/complete');
+    }
+
+    return next();
 }
