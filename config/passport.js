@@ -62,6 +62,7 @@ module.exports = function(passport) {
                     // set the user's local credentials
                     newUser.local.username = username;
                     newUser.local.password = newUser.generateHash(password);
+                    newUser.deviceId = id;
 
                     // save the user
                     newUser.save(function (err) {
@@ -101,6 +102,7 @@ module.exports = function(passport) {
                 if (!user.validPassword(password))
                     return done(null, false, req.flash('message', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
+                
                 // all is well, return successful user
                 return done(null, user);
             });

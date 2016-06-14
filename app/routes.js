@@ -67,14 +67,12 @@ module.exports = function (app, passport) {
         }));
 
     // =================================
-    // STATIC CONTENT ==================
+    // EVERYTHING ======================
     // =================================
-    // serves all static content (html, css)
-    // should be the last one
-    app.get('*', isLoggedIn, function (req, res) {
-        fs.readFile(__dirname + '/../public/index.html', 'utf8', function (err, content) {
-            res.send(content);
-        });
+    // if it didn't match any of the previous rules, it is probably a page
+    // if not we still give them the page (A)
+    app.get('*', isLoggedIn, function(req, res) {
+        res.render('index.ejs', {username: req.user.local.username, deviceId: req.user.deviceId});
     });
 };
 

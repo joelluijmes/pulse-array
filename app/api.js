@@ -70,7 +70,7 @@ module.exports = function (app) {
     // and in what order
     app.get('/api/bpms/fetch/', function (req, res) {
         // parse all request parameters
-        var id = req.query.id;
+        var id = req.user.deviceId;
         var begin = Number(req.query.start) || 0;
         var end = Number(req.query.end) || -1;
         var limit = Number(req.query.limit) || 10;
