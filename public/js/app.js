@@ -1,12 +1,28 @@
 angular.module('myApp', ['ui.router'])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-        $urlRouterProvider.otherwise('/home');
+        $urlRouterProvider.otherwise('/overview');
         $locationProvider.html5Mode(true);
 
         $stateProvider
-            .state('home', {
-                url: '/home',
-                templateUrl: '../partials/home.html'
+            .state('overview', {
+                //abstract: true,
+                url: '/overview',
+                //templateUrl: '../partials/overview.html',
+                views: {
+                    mainModule: {
+                        templateUrl: '../partials/overview.html'
+                    },
+                    'realtime@overview': {
+                        templateUrl: '../partials/realtime.html'
+                    },
+                    'history@overview': {
+                        templateUrl: '../partials/history.html'
+                    }
+                }
+            })
+            .state('overview.realtime', {
+                url: '/realtime',
+                templateUrl: '../partials/realtime.html'
             })
             .state('realtime', {
                 url: '/realtime',

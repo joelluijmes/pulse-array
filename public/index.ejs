@@ -31,7 +31,7 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="/home" class="site_title"> <span>Pulse Away!</span></a>
+                    <a href="/overview" class="site_title"> <span>Pulse Away!</span></a>
                 </div>
 
                 <div class="clearfix"></div>
@@ -42,11 +42,9 @@
                 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                     <div class="menu_section">
                         <ul class="nav side-menu">
-                            <li><a href="/home"><i class="fa fa-home"></i> Home</a></li>
+                            <li><a href="/overview"><i class="fa fa-home"></i> Overview</a></li>
                             <li><a href="/realtime"><i class="fa fa-bar-chart-o"></i> Realtime</a></li>
                             <li><a href="/history"><i class="fa fa-book"></i> History</a></li>
-                            <li><a href="/backup"><i class="fa fa-cloud-download"></i> Backup</a></li>
-                            <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                         </ul>
                     </div>
                 </div>
@@ -83,7 +81,7 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-            <div ui-view></div>
+            <div ui-view="mainModule"></div>
 
             <br>
 
@@ -104,7 +102,7 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/PACE/pace.min.js"></script>
 <script src="bower_components/socket.io-client/socket.io.js"></script>
 
