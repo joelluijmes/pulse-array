@@ -27,7 +27,12 @@ app.use(morgan('dev'));                                 // log every request to 
 app.use(cookieParser());                                // read cookies (needed for auth)
 app.use(bodyParser.json());                             // html forms
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(path.join(__dirname, 'public')));// static content
+
+var viewsPath = path.join(__dirname, 'public');
+app.use(express.static(viewsPath));// static content
+app.set('views', viewsPath);
+
+app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({ secret: 'joelandjasperissupercooledev:D', resave: true, saveUninitialized: true })); // session secret
