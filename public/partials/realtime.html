@@ -112,18 +112,38 @@
                 displacement = 0;
         }, delay);
 
+        function setBpm(val) {
+            if (!val || val === 0) {
+                $('#bpm').html('-');
+                bpm = 0;
+            } else {
+                bpm = val;
+                $('#bpm').html(bpm);
+
+                outdated = 0;
+            }
+        }
+
         $.get('/api/bpms/fetch?id=1&limit=1', function (res) {
             if (!res.data || res.data.length === 0) {
-                $('#bpm').html('-');
+                setBpm(0);
             } else {
-                bpm = res.data[0].bpms.bpm;
-                $('#bpm').html(bpm);
+                setBpm(res.data[0].bpms.bpm);
             }
         });
 
+        var outdated = 0;
+        setInterval(function() {
+            ++outdated;
+
+            if (outdated < 3)
+                return;
+
+            setBpm(0);
+        }, 1000);
+
         socket.on('liveUpdate', function (res) {
-            bpm = res.bpm;
-            $('#bpm').html(bpm);
+            setBpm(res.bpm);
         });
     });
 </script>
