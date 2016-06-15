@@ -39,16 +39,18 @@
 
 <script>
     $(function () {
-        setInterval(function() {
+        function update() {
             $.get('/api/statistics', function (res) {
                 if (res.status !== 'success')
-                        return;
+                    return;
 
                 $('#totalUsers').html(res.data.totalUsers);
                 $('#avgHeartbeat').html(res.data.avgHeartbeat.toFixed(2));
                 $('#avgHeartbeatAll').html(res.data.avgHeartbeatAll.toFixed(2));
                 $('#totalHeartbeat').html(res.data.totalHeartbeat);
             });
-        }, 1000);
+        }
+        setInterval(update, 1000);
+        update();
     });
 </script>

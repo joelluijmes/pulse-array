@@ -137,11 +137,13 @@
             }
         }
 
-        $.get('/api/bpms/fetch?id=1&limit=1', function (res) {
+        $.get('/api/bpm/fetch?id=1&limit=1', function (res) {
             if (res.data && res.data.length !== 0) {
-                var elapsed = new Date() - new Date(res.data[0].bpms.date);
-                if (elapsed < 3000)
-                    setBpm(res.data[0].bpms.bpm);
+                var elapsed = new Date() - new Date(res.data[0].date);
+                if (elapsed < 3000) {
+                    setBpm(res.data[0].bpm);
+                    return;
+                }
             }
 
             setBpm(0);
