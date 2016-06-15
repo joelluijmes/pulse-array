@@ -2,22 +2,22 @@
 <div class="row tile_count">
     <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
-        <div id="totalUsers" class="count">2</div>
-        <span class="count_bottom">Registered with a device</span>
+        <div id="totalUsers" class="count">-</div>
+        <span class="count_bottom">Registered</span>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Viewers</span>
-        <div id="onlineViewers" class="count">2</div>
-        <span class="count_bottom">Online viewers</span>
+        <span class="count_top"><i class="fa fa-user"></i> Average Heartbeat</span>
+        <div id="avgHeartbeat" class="count">-</div>
+        <span class="count_bottom">From this device</span>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-clock-o"></i> Average Heartbeat</span>
-        <div id="avgHeartbeat" class="count">76,4</div>
+        <div id="avgHeartbeatAll" class="count">-</div>
         <span class="count_bottom">From all users</span>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i> Total Heartbeats</span>
-        <div id="totalHeartbeat" class="count">2,315</div>
+        <div id="totalHeartbeat" class="count">-</div>
         <span class="count_bottom">From last time</span>
     </div>
 </div>
@@ -39,21 +39,16 @@
 
 <script>
     $(function () {
-        socket.on('totalUsers', function (res) {
-            $('#totalUsers').html(res);
-        });
+        setInterval(function() {
+            $.get('/api/statistics', function (res) {
+                if (res.status !== 'success')
+                        return;
 
-        socket.on('onlineViewers', function (res) {
-            $('#onlineViewers').html(res);
-        });
-
-        socket.on('avgHeartbeat', function (res) {
-            var avg = res.toFixed(1).toString().replace('.', ',');
-            $('#avgHeartbeat').html(avg);
-        });
-
-        socket.on('totalHeartbeat', function (res) {
-            $('#totalHeartbeat').html(res);
-        });
+                $('#totalUsers').html(res.data.totalUsers);
+                $('#avgHeartbeat').html(res.data.avgHeartbeat.toFixed(2));
+                $('#avgHeartbeatAll').html(res.data.avgHeartbeatAll.toFixed(2));
+                $('#totalHeartbeat').html(res.data.totalHeartbeat);
+            });
+        }, 1000);
     });
 </script>
