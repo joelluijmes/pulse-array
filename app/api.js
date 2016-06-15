@@ -64,16 +64,16 @@ module.exports = function (app) {
     // and in what order
     app.get('/api/bpm/fetch/', function (req, res) {
         // parse all request parameters
+        if (!req.isAuthenticated()) {
+            res.json({status: 'error', message: 'You must be logged in to view these precious bpms :<'});
+            return;
+        }
+
         var id = req.user.deviceId;
         var begin = Number(req.query.start) || 0;
         var end = Number(req.query.end) || -1;
         var limit = Number(req.query.limit) || 10;
         var order = req.query.order;
-
-        if (typeof(id) === 'undefined') {
-            res.json({status: 'error', message: 'No id given'});
-            return;
-        }
 
         // 1 is ascending, -1 is descending
         order = (order === 'asc') ? 1 : -1;
