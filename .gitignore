@@ -45,3 +45,6 @@ fabric.properties
 
 node_modules/
 public/bower_components/
+
+# auth is different on all machines
+config/auth.js
