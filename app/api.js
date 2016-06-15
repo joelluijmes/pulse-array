@@ -42,6 +42,10 @@ module.exports = function (app) {
             // for every bpm we received from the client
             for (var i = 0; i < bpms.length; i++) {
                 timestamp += interval;              // timestamp is of the first bpm, calculate the next
+
+                if(bpms[i] == 0)
+                    continue;
+                
                 var data = new Bpm({
                     date: timestamp * 1000,         // js works with ms timestamp
                     bpm: bpms[i]
