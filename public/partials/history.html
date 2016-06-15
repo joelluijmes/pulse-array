@@ -56,7 +56,7 @@
         }
 
         function updateGraph(startDate, endDate) {
-            var url = '/api/bpms/fetch?limit=-1&start=' + startDate.getTime() + '&end=' + endDate.getTime();
+            var url = '/api/bpm/fetch?limit=-1&start=' + startDate.getTime() + '&end=' + endDate.getTime();
 
             $.get(url, function (res) {
                 data = $.map(res.data, function (d) {

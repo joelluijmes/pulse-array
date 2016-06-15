@@ -103,8 +103,6 @@ function isLoggedIn(req, res, next) {
 }
 
 function isRegistered(req, res, next) {
-    console.log(req.url);
-
     if (!req.isAuthenticated()) {
         res.redirect('/login');
         return;
