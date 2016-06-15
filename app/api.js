@@ -1,4 +1,5 @@
 // app/api.js
+var async = require('async');
 var User = require('./models/user');
 var Bpm = require('./models/bpm');
 var sockets = require('./sockets');
@@ -115,6 +116,56 @@ module.exports = function (app) {
             }
 
             res.json({status: 'success', data: users});
+        });
+    });
+
+    // =================================
+    // GET INFO ========================
+    // =================================
+    // gives some statistics about the web app
+    app.get('/api/statistics/', function (req, res) {
+        if (!req.isAuthenticated()) {
+            res.json({status: 'error', message: 'You must be logged in to view these precious bpms :<'});
+            return;
+        }
+
+        var id = req.user.deviceId;
+
+        async.parallel({
+            totalUsers: function (callback) {
+                User.aggregate([
+                    {$group: {_id: '', count: {$sum: 1}}}
+                ], function (err, data) {
+                    callback(err, data[0].count);
+                });
+            },
+            avgHeartbeat: function (callback) {
+                Bpm.aggregate([
+                    {$match: {deviceId: id}},
+                    {$group: {_id: '', average: {$avg: '$bpm'}}}
+                ], function (err, data) {
+                    callback(err, data[0].average);
+                });
+            },
+            avgHeartbeatAll: function (callback) {
+                Bpm.aggregate([
+                    {$group: {_id: '', average: {$avg: '$bpm'}}}
+                ], function (err, data) {
+                    callback(err, data[0].average);
+                });
+            },
+            totalHeartbeat: function (callback) {
+                Bpm.aggregate([
+                    {$group: {_id: '', count: {$sum: 1}}}
+                ], function (err, data) {
+                    callback(err, data[0].count);
+                });
+            }
+        }, function(err, results) {
+            if (err)
+                res.json({status: 'error', message: err});
+            else
+                res.json({status: 'success', data: results});
         });
     });
 };
