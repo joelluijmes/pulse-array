@@ -49,8 +49,8 @@
         };
 
         function translateToFlot(item) {
-            var time = new Date(item.bpms.date).getTime();
-            var bpm = item.bpms.bpm;
+            var time = new Date(item.date).getTime();
+            var bpm = item.bpm;
 
             return [time, bpm];
         }
