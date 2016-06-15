@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var bpmSchema = new Schema({
     date: { type: Date, default: Date.now },
-    bpm: Number
+    bpm: Number,
+    deviceId: Number
 });
 
-module.exports = mongoose.model("BpmModel", bpmSchema);
+module.exports = mongoose.model("Bpm", bpmSchema);

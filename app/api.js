@@ -24,45 +24,37 @@ module.exports = function (app) {
         var timestamp = parseInt(req.body.timestamp);
         var bpms = JSON.parse(req.body.bpms);
 
-        // find the user with this device id
-        User.findOne({deviceId: id}, function (err, user) {
-            if (err) {
-                res.json({status: 'error', message: err});
-                return;
-            }
-            if (!user) {
-                res.json({status: 'error', message: 'User not found'});
-                return;
-            }
-            if (bpms.length < 1) {
-                res.json({status: 'error', message: 'Invalid frame length'});
-                return;
-            }
+        if (bpms.length < 1) {
+            res.json({status: 'error', message: 'Invalid frame length'});
+            return;
+        }
 
-            // for every bpm we received from the client
-            for (var i = 0; i < bpms.length; i++) {
-                timestamp += interval;              // timestamp is of the first bpm, calculate the next
-                var data = new Bpm({
-                    date: timestamp * 1000,         // js works with ms timestamp
-                    bpm: bpms[i]
-                });
+        // for every bpm we received from the client
+        for (var i = 0; i < bpms.length; i++) {
+            timestamp += interval;              // timestamp is of the first bpm, calculate the next
+            var bpm = new Bpm({
+                date: timestamp * 1000,         // js works with ms timestamp
+                bpm: bpms[i],
+                deviceId: id
+            });
 
-                user.bpms.push(data);
-
-                // send the bpm to the web clients
-                sockets.broadcast('liveUpdate', {date: data.date, bpm: data.bpm});
-            }
-
-            // save the data
-            user.save(function (err) {
+            var errored = false;
+            bpm.save(function (err) {
                 if (err) {
                     res.json({status: 'error', message: err});
-                    return;
+                    errored = true;
                 }
-
-                res.json({status: 'success', message: 'Bpm saved :)'});
             });
-        });
+
+            if (errored)
+                return;
+
+            // send the last bpm to the web clients
+            if (i === bpms.length - 1)
+                sockets.broadcast('liveUpdate', {date: bpm.date, bpm: bpm.bpm});
+        }
+
+        res.json({status: 'success', message: 'Bpm saved :)'});
     });
 
     // =================================
@@ -70,9 +62,9 @@ module.exports = function (app) {
     // =================================
     // gets bpm data from a user, able to select a date range, how many
     // and in what order
-    app.get('/api/bpms/fetch/', function (req, res) {
+    app.get('/api/bpm/fetch/', function (req, res) {
         // parse all request parameters
-        var id = req.user.deviceId;
+        var id = 1;// req.user.deviceId;
         var begin = Number(req.query.start) || 0;
         var end = Number(req.query.end) || -1;
         var limit = Number(req.query.limit) || 10;
@@ -85,31 +77,30 @@ module.exports = function (app) {
 
         // 1 is ascending, -1 is descending
         order = (order === 'asc') ? 1 : -1;
-        limit = (limit === -1) ? 100000 : 0;
+        limit = (limit === -1) ? 100000 : limit;
 
-        User.aggregate([
-            {$match: {'deviceId': Number(id)}},     // where matches the device id
-            {$project: {'bpms': 1}},
-            {$unwind: '$bpms'},                     // project on bpms
+        Bpm.aggregate([
             {
                 $match: {
-                    'bpms.date': {                  // where the date is in range
-                        '$gte': new Date(begin),
-                        '$lte': (end === -1) ? new Date() : new Date(end)
-                    }
+                    $and: [
+                        {'deviceId': Number(id)},
+                        {
+                            'date': {
+                                '$gte': new Date(begin),
+                                '$lte': (end === -1) ? new Date() : new Date(end)
+                            }
+                        }
+                    ]
                 }
             },
-            {$sort: {'bpms.date': order}},          // order by the date
-            {$limit: limit}                         // maximum to get
+            {$sort: {'date': order}},
+            {$limit: limit}
         ], function (err, data) {
-            if (err) {
+            if (err)
                 res.json({status: 'error', message: err});
-                return;
-            }
-
-            res.json({status: 'success', data: data});
+            else
+                res.json({status: 'success', data: data});
         });
-
     });
 
     // =================================

@@ -17,7 +17,6 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    bpms: [BpmModel.schema],
     deviceId: Number
 });
 
