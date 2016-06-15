@@ -64,7 +64,7 @@ module.exports = function (app) {
     // and in what order
     app.get('/api/bpm/fetch/', function (req, res) {
         // parse all request parameters
-        var id = 1;// req.user.deviceId;
+        var id = req.user.deviceId;
         var begin = Number(req.query.start) || 0;
         var end = Number(req.query.end) || -1;
         var limit = Number(req.query.limit) || 10;
