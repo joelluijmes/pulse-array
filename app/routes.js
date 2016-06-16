@@ -88,9 +88,9 @@ module.exports = function (app, passport) {
     // if not we still give them the page (A)
     app.get('*', isRegistered, function (req, res) {
         var username = '';
-        if (typeof(req.user.local) !== 'undefined')
+        if (typeof(req.user.local.username) !== 'undefined')
             username = req.user.local.username;
-        else if (typeof(req.user.google) !== 'undefined')
+        else if (typeof(req.user.google.name) !== 'undefined')
             username = req.user.google.name;
 
         res.render('index.ejs', {username: username, deviceId: req.user.deviceId});
