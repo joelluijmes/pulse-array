@@ -8,6 +8,8 @@
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.15.1",
     "browser-sync": "^2.12.8",
+    "connect-mongo": "^1.2.0",
+    "connect-mongo-store": "^0.1.8",
     "cookie-parser": "^1.4.3",
     "cors": "^2.7.1",
     "ejs": "^2.4.1",
@@ -23,6 +25,7 @@
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "passport.socketio": "^3.6.1",
     "path": "^0.12.7",
     "require-dir": "^0.3.0",
     "socket.io": "^1.4.6"
