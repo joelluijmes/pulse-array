@@ -139,7 +139,7 @@ module.exports = function (app) {
                 User.aggregate([
                     {$group: {_id: '', count: {$sum: 1}}}
                 ], function (err, data) {
-                    callback(err, data[0].count);
+                    callback(err, data ? 0 : data[0].count);
                 });
             },
             avgHeartbeat: function (callback) {
@@ -147,21 +147,21 @@ module.exports = function (app) {
                     {$match: {deviceId: id}},
                     {$group: {_id: '', average: {$avg: '$bpm'}}}
                 ], function (err, data) {
-                    callback(err, data[0].average);
+                    callback(err, data ? 0 : data[0].average);
                 });
             },
             avgHeartbeatAll: function (callback) {
                 Bpm.aggregate([
                     {$group: {_id: '', average: {$avg: '$bpm'}}}
                 ], function (err, data) {
-                    callback(err, data[0].average);
+                    callback(err, data ? 0 : data[0].average);
                 });
             },
             totalHeartbeat: function (callback) {
                 Bpm.aggregate([
                     {$group: {_id: '', count: {$sum: 1}}}
                 ], function (err, data) {
-                    callback(err, data[0].count);
+                    callback(err, data ? 0 : data[0].count);
                 });
             }
         }, function(err, results) {

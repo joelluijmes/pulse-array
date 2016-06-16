@@ -24,16 +24,16 @@ module.exports = function (app, passport) {
         failureFlash: true // allow flash messages
     }));
 
-    app.get('/logout', function(req, res){
+    app.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/login');
     });
 
-    app.get('/complete', isLoggedIn, function(req, res) {
+    app.get('/complete', isLoggedIn, function (req, res) {
         res.render('complete.ejs');
     });
 
-    app.post('/complete', isLoggedIn, function(req, res) {
+    app.post('/complete', isLoggedIn, function (req, res) {
         var id = req.body.deviceId;
 
         req.user.deviceId = id;
@@ -54,7 +54,7 @@ module.exports = function (app, passport) {
     app.get('/auth/google/callback',
         passport.authenticate('google', {
             failureRedirect: '/login'
-        }), function(req, res) {
+        }), function (req, res) {
             res.redirect('/');
             //var x = req.query.username;
         });
@@ -86,8 +86,14 @@ module.exports = function (app, passport) {
     // =================================
     // if it didn't match any of the previous rules, it is probably a page
     // if not we still give them the page (A)
-    app.get('*', isRegistered, function(req, res) {
-        res.render('index.ejs', {username: req.user.local.username, deviceId: req.user.deviceId});
+    app.get('*', isRegistered, function (req, res) {
+        var username = '';
+        if (typeof(req.user.local) !== 'undefined')
+            username = req.user.local.username;
+        else if (typeof(req.user.google) !== 'undefined')
+            username = req.user.google.name;
+
+        res.render('index.ejs', {username: username, deviceId: req.user.deviceId});
     });
 };
 
